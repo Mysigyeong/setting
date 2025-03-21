@@ -38,7 +38,7 @@ RUN \
         tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
         ln -s /opt/nvim-linux-x86_64/bin/nvim /opt/nvim-linux-x86_64/bin/vi && \
         echo 'if [[ ! "$PATH" =~ "/opt/nvim-linux-x86_64/bin" ]]; then' >> $HOME/.zshrc && \
-        echo 'export PATH="/opt/nvim-linux-x86_64/bin"' >> $HOME/.zshrc && \
+        echo '    export PATH="/opt/nvim-linux-x86_64/bin"' >> $HOME/.zshrc && \
         echo 'fi' >> $HOME/.zshrc && \
         rm nvim-linux-x86_64.tar.gz && \
         git clone https://github.com/NvChad/starter $HOME/.config/nvim

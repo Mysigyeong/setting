@@ -22,7 +22,7 @@ chmod u+x $HOME/.local/bin/vi
 
 if [[ ! "$PATH" =~ "$HOME/.local/bin" ]]; then
     echo 'if [[ ! "$PATH" =~ "$HOME/.local/bin" ]]; then' >> $SHRC
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> $SHRC
+    echo '    export PATH="$HOME/.local/bin:$PATH"' >> $SHRC
     echo 'fi' >> $SHRC
 fi
 
