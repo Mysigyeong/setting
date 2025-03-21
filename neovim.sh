@@ -21,7 +21,9 @@ curl -o $HOME/.local/bin/vi -L https://github.com/neovim/neovim/releases/latest/
 chmod u+x $HOME/.local/bin/vi
 
 if [[ ! "$PATH" =~ "$HOME/.local/bin" ]]; then
-    echo 'if [[ ! "$PATH" =~ "$HOME/.local/bin" ]]; then\n\texport PATH="$HOME/.local/bin:$PATH"\nfi' >> $SHRC
+    echo 'if [[ ! "$PATH" =~ "$HOME/.local/bin" ]]; then' >> $SHRC
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> $SHRC
+    echo 'fi' >> $SHRC
 fi
 
 # Install NvChad
