@@ -4,25 +4,23 @@ LABEL org.opencontainers.image.authors="wbs79@kaist.ac.kr"
 
 WORKDIR /root
 
-RUN \
 # Change archive source to kakao mirror
+# Set timezone without interaction
+RUN \
         apt update -y && \
         apt install ca-certificates sed -y && \
         sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list.d/ubuntu.sources && \
         sed -i 's/http/https/g' /etc/apt/sources.list.d/ubuntu.sources && \
         apt update -y && \
-# Set timezone without interaction
         DEBIAN_FRONTEND=noninteractive apt install -y tzdata && \
         ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
-# apt upgrade
         apt upgrade -y
 
+# Install Oh My Zsh
 RUN \
         apt install curl zsh git tmux build-essential ripgrep unzip tar gzip -y && \
-# Install Oh My Zsh
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && \
         chsh -s /bin/zsh && \
-    # Configure Oh My Zsh
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" && \
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
@@ -32,8 +30,8 @@ RUN \
 
 COPY assets/my_p10k.zsh .p10k.zsh
 
-RUN \
 # Install NeoVIM
+RUN \
         curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz && \
         tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
         ln -s /opt/nvim-linux-x86_64/bin/nvim /opt/nvim-linux-x86_64/bin/vi && \
@@ -46,8 +44,8 @@ RUN \
 COPY assets/nvchad_config .config/nvim
 
 ## Scala
-RUN \
 ### Install JDK 17
+RUN \
         curl -LO https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz && \
         tar -zxvf openjdk-17.0.2_linux-x64_bin.tar.gz && \
         mkdir -p $HOME/.local && \
@@ -61,8 +59,8 @@ RUN \
 ENV JAVA_HOME=/root/.local/jdk-17.0.2 \
     PATH=/root/.local/jdk-17.0.2/bin:$PATH
 
-RUN \
 ### Install Metals
+RUN \
         curl -fL "https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz" | gzip -d > cs && \
         chmod +x cs && \
         yes "n" | ./cs setup && \
@@ -71,3 +69,21 @@ RUN \
         echo 'fi' >> $HOME/.zshrc && \
         ./cs install metals && \
         rm ./cs
+
+### Install Rust Analyzer
+RUN \
+        curl -o rust_installer.sh https://sh.rustup.rs -sSf && \
+        chmod +x rust_installer.sh && \
+        ./rust_installer.sh -y && \
+        echo '. "$HOME/.cargo/env"' >> $HOME/.zshrc && \
+        . "$HOME/.cargo/env" && \
+        rm ./rust_installer.sh && \
+        rustup component add rust-analyzer
+
+### Install Clangd
+RUN apt install clang clangd bear -y
+
+### Install Pyright
+RUN \
+        apt install python3 python3-pip -y && \
+        pip3 install pyright --break-system-packages

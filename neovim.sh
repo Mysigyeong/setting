@@ -62,6 +62,17 @@ echo 'fi' >> $SHRC
 rm ./cs
 
 ## Rust
+curl -o rust_installer.sh https://sh.rustup.rs -sSf
+chmod +x rust_installer.sh
+./rust_installer.sh -y
+echo '. "$HOME/.cargo/env"' >> $HOME/.zshrc
+. "$HOME/.cargo/env"
+rm ./rust_installer.sh
+rustup component add rust-analyzer
 
 ## C++
+sudo apt install clang clangd bear -y
+
 ## Python
+sudo apt install python3 python3-pip -y
+pip3 install pyright
