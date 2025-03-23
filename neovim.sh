@@ -33,7 +33,7 @@ mkdir -p $HOME/.local/share/fonts
 cp UbuntuMono/*.ttf $HOME/.local/share/fonts/
 fc-cache -f -v
 
-# Install NvChad and LSP
+# Install NvChad, LSPs, and DAP
 mkdir -p $HOME/.config/
 cp -r assets/nvchad_config $HOME/.config/nvim 
 
@@ -71,8 +71,12 @@ rm ./rust_installer.sh
 rustup component add rust-analyzer
 
 ## C++
-sudo apt install clang clangd bear -y
+sudo apt install clang clangd bear cmake -y
 
 ## Python
 sudo apt install python3 python3-pip -y
 pip3 install pyright
+
+## DAP
+sudo apt install gdb -y
+pip3 install debugpy

@@ -111,7 +111,9 @@ lspconfig.clangd.setup {
   init_options = {
     statusBarProvider = "off",
   },
-  on_attach = nvlsp.on_attach,
+  on_attach = function (client, bufnr)
+    client.server_capabilities.signatureHelpProvider = false
+  end,
   root_dir = function(fname)
     return util.root_pattern(
       "configure",

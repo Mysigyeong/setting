@@ -40,7 +40,7 @@ RUN \
         echo 'fi' >> $HOME/.zshrc && \
         rm nvim-linux-x86_64.tar.gz
 
-# Install NvChad and LSPs
+# Install NvChad, LSPs, and DAP
 COPY assets/nvchad_config .config/nvim
 
 ## Scala
@@ -81,9 +81,14 @@ RUN \
         rustup component add rust-analyzer
 
 ### Install Clangd
-RUN apt install clang clangd bear -y
+RUN apt install clang clangd bear cmake -y
 
 ### Install Pyright
 RUN \
         apt install python3 python3-pip -y && \
         pip3 install pyright --break-system-packages
+
+### Install DAP 
+RUN \
+        apt install gdb -y
+        pip3 install debugpy --break-system-packages
